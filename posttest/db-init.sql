@@ -17,4 +17,4 @@ INSERT INTO lottery(ticket_number, price, amount)
 VALUES ('000002', 80, 1);
 
 INSERT INTO lottery(ticket_number, price, amount)
-VALUES ('000003', 80, 1);
+VALUES ('123456', 80, 1);
