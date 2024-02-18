@@ -17,7 +17,11 @@ public class Lottery {
     private Integer price;
     private Integer amount;
 
-    public Lottery() {
+    public Lottery(String ticket_number,Integer price,Integer amount) {
+        this.ticket_number = ticket_number;
+        this.price = price;
+        this.amount = amount;
+
     }
 }
 
