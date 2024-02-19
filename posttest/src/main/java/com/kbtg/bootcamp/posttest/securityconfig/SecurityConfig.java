@@ -4,6 +4,7 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.http.HttpMethod;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
+import org.springframework.security.config.annotation.web.configurers.AbstractHttpConfigurer;
 import org.springframework.security.core.userdetails.User;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
@@ -19,14 +20,14 @@ import static org.springframework.security.config.Customizer.withDefaults;
 public class SecurityConfig {
     @Bean
     SecurityFilterChain defaultSecurityFilterChain(HttpSecurity http) throws Exception {
-        return http
+        //disable csrf for sent request from postman
+        http.csrf(AbstractHttpConfigurer::disable)
                 .authorizeHttpRequests((requests)->requests
-                        .requestMatchers("/admin/lotteries").hasRole("ADMIN")
-                        .requestMatchers("/lotteries").permitAll()
-                        .anyRequest().authenticated()
+                        .requestMatchers(HttpMethod.POST,"/admin/**").hasRole("ADMIN")
+                        .anyRequest().permitAll()
                 )
-                .httpBasic(withDefaults())
-                .build();
+                .httpBasic(withDefaults());
+        return http.build();
     }
 
     @Bean
