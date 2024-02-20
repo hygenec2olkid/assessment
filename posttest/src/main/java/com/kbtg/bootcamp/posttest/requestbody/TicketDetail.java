@@ -7,7 +7,7 @@ public record TicketDetail(
         @NotNull
         @Pattern(regexp = "\\d+", message = "Lottery should have only number")
         @Size(min = 6,max = 6, message = "Lottery should have 6 character")
-        String ticket_number,
+        String ticket,
         @NotNull
         @Positive(message = "Price should more than 0")
         Integer price,
