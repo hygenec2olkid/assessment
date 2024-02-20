@@ -1,4 +1,4 @@
-package com.kbtg.bootcamp.posttest.lottery;
+package com.kbtg.bootcamp.posttest.table;
 
 import jakarta.persistence.*;
 import lombok.Getter;
@@ -21,7 +21,9 @@ public class Lottery {
         this.ticket_number = ticket_number;
         this.price = price;
         this.amount = amount;
+    }
 
+    public Lottery() {
     }
 }
 

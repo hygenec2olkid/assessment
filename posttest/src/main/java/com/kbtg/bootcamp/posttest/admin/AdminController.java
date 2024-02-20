@@ -12,11 +12,12 @@ import org.springframework.web.bind.annotation.RestController;
 import java.util.Map;
 
 @RestController
+@RequestMapping("/admin")
 public class AdminController {
     @Autowired
     private  LotteryService lotteryService;
 
-    @PostMapping("/admin/lotteries")
+    @PostMapping("/lotteries")
     public Map<String,String> addNewLotteryTicket(@Validated @RequestBody TicketDetail ticketDetail){
         return this.lotteryService.addNewLotteryTicket(ticketDetail);
     }

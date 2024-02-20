@@ -1,10 +1,22 @@
 -- Drop tables if they exist
 DROP TABLE IF EXISTS lottery CASCADE;
+DROP TABLE IF EXISTS user_ticket CASCADE;
 
 CREATE TABLE lottery
 (
     id              SERIAL PRIMARY KEY,
     ticket_number   VARCHAR(6) NOT NULL,
+    price           INTEGER NOT NULL,
+    amount          INTEGER NOT NULL
+
+);
+
+CREATE TABLE user_ticket
+(
+    id              SERIAL PRIMARY KEY,
+    user_id          INTEGER NOT NULL,
+    ticket_id        INTEGER NOT NULL,
+    ticket_number    VARCHAR(6) NOT NULL,
     price           INTEGER NOT NULL,
     amount          INTEGER NOT NULL
 

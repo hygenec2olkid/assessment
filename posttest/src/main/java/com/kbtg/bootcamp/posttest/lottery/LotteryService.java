@@ -1,6 +1,8 @@
 package com.kbtg.bootcamp.posttest.lottery;
 
+import com.kbtg.bootcamp.posttest.repository.LotteryRepository;
 import com.kbtg.bootcamp.posttest.requestbody.TicketDetail;
+import com.kbtg.bootcamp.posttest.table.Lottery;
 import org.springframework.stereotype.Service;
 
 import java.util.Collections;
@@ -20,8 +22,8 @@ public class LotteryService {
     }
 
     public Map<String, String> addNewLotteryTicket(TicketDetail ticketDetail) {
-        Lottery lottery = new Lottery(ticketDetail.ticket_number(),ticketDetail.amount(),ticketDetail.price());
+        Lottery lottery = new Lottery(ticketDetail.ticket(),ticketDetail.price(),ticketDetail.amount());
         this.lotteryRepository.save(lottery);
-        return Collections.singletonMap("ticket",ticketDetail.ticket_number());
+        return Collections.singletonMap("ticket",ticketDetail.ticket());
     }
 }
