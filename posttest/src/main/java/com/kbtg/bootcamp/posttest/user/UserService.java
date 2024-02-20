@@ -6,19 +6,17 @@ import com.kbtg.bootcamp.posttest.repository.LotteryRepository;
 import com.kbtg.bootcamp.posttest.repository.UserTicketRepository;
 import com.kbtg.bootcamp.posttest.table.Lottery;
 import com.kbtg.bootcamp.posttest.table.UserTicket;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.*;
 
 @Service
 public class UserService {
-    private final LotteryRepository lotteryRepository;
-    private final UserTicketRepository userTicketRepository;
-
-    public UserService(LotteryRepository lotteryRepository,UserTicketRepository userTicketRepository) {
-        this.lotteryRepository = lotteryRepository;
-        this.userTicketRepository = userTicketRepository;
-    }
+    @Autowired
+    private  LotteryRepository lotteryRepository;
+    @Autowired
+    private  UserTicketRepository userTicketRepository;
 
     public Map<String,String> buyLotteryTicket(Integer userId, Integer ticketId) throws LotteryPurchaseException {
         Lottery lottery = this.lotteryRepository.getAllLotteryById(ticketId);
