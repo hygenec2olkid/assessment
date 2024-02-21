@@ -1,7 +1,8 @@
 package com.kbtg.bootcamp.posttest.user;
 
-import com.kbtg.bootcamp.posttest.exceptionhandler.LotteryDeleteException;
-import com.kbtg.bootcamp.posttest.exceptionhandler.LotteryPurchaseException;
+import com.kbtg.bootcamp.posttest.exceptionhandler.exception.LotteryDeleteException;
+import com.kbtg.bootcamp.posttest.exceptionhandler.exception.LotteryIdNotFound;
+import com.kbtg.bootcamp.posttest.exceptionhandler.exception.LotteryPurchaseException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
@@ -18,7 +19,7 @@ public class UserController {
     }
 
     @GetMapping("/{userId}/lotteries")
-    Map<String, Object> getListAllLotteryTicket(@PathVariable Integer userId){
+    Map<String, Object> getListAllLotteryTicket(@PathVariable Integer userId) throws LotteryIdNotFound {
         return this.userService.getListAllLotteryTicket(userId);
     }
 

@@ -1,7 +1,8 @@
 package com.kbtg.bootcamp.posttest.user;
 
-import com.kbtg.bootcamp.posttest.exceptionhandler.LotteryDeleteException;
-import com.kbtg.bootcamp.posttest.exceptionhandler.LotteryPurchaseException;
+import com.kbtg.bootcamp.posttest.exceptionhandler.exception.LotteryDeleteException;
+import com.kbtg.bootcamp.posttest.exceptionhandler.exception.LotteryIdNotFound;
+import com.kbtg.bootcamp.posttest.exceptionhandler.exception.LotteryPurchaseException;
 import com.kbtg.bootcamp.posttest.repository.LotteryRepository;
 import com.kbtg.bootcamp.posttest.repository.UserTicketRepository;
 import com.kbtg.bootcamp.posttest.table.Lottery;
@@ -20,14 +21,13 @@ public class UserService {
 
     public Map<String,String> buyLotteryTicket(Integer userId, Integer ticketId) throws LotteryPurchaseException {
         Lottery lottery = this.lotteryRepository.getAllLotteryById(ticketId);
-        if (lottery.getAmount() > 0){
+        if (lottery != null){
             UserTicket userTicket = new UserTicket(userId,lottery.getId(),lottery.getTicket_number(),lottery.getPrice(),lottery.getAmount());
             UserTicket saveTicket = this.userTicketRepository.save(userTicket);
 
             updateLotteryAfterBuy(lottery);
             return Collections.singletonMap("id",String.valueOf(saveTicket.getId()));
-        }
-        throw new LotteryPurchaseException("ticketId: " + ticketId + " not have in repository");
+        }throw new LotteryPurchaseException("ticketId: " + ticketId + " not have in repository");
     }
     private void updateLotteryAfterBuy(Lottery lottery){
         lottery.setAmount(lottery.getAmount() - 1);
@@ -38,16 +38,17 @@ public class UserService {
         }
     }
 
-    public Map<String,Object> getListAllLotteryTicket(Integer userId) {
-        List<String> lst = this.userTicketRepository.getListLotteriesByUserId(userId);
-        Integer count = calTotalCount(lst);
-        Integer cost = calTotalCost(lst);
-
-        Map<String,Object> response= new HashMap<>();
-        response.put("tickets",cutStringList(lst));
-        response.put("count",count);
-        response.put("cost",cost);
-        return response;
+    public Map<String,Object> getListAllLotteryTicket(Integer userId) throws LotteryIdNotFound {
+            List<String> lst = this.userTicketRepository.getListLotteriesByUserId(userId);
+            if (!lst.isEmpty()){
+                Integer count = calTotalCount(lst);
+                Integer cost = calTotalCost(lst);
+                Map<String,Object> response= new HashMap<>();
+                response.put("tickets",cutStringList(lst));
+                response.put("count",count);
+                response.put("cost",cost);
+                return response;
+            }throw new LotteryIdNotFound("UserId: " + userId + " not found");
     }
 
     private Integer calTotalCount(List<String> lst) {
@@ -86,6 +87,6 @@ public class UserService {
             return Collections.singletonMap("ticket",ticketNumber);
         }
 
-        throw new LotteryDeleteException("Delete fail");
+        throw new LotteryDeleteException("Delete fail please check userId and ticketId have in repository");
     }
 }
