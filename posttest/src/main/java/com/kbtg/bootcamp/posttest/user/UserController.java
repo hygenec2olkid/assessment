@@ -14,17 +14,17 @@ public class UserController {
     @Autowired
     private UserService userService;
     @PostMapping("/{userId}/lotteries/{ticketId}")
-    Map<String, String> buyLotteryTicket(@PathVariable Integer userId,@PathVariable Integer ticketId) throws LotteryPurchaseException {
+    Map<String, String> butNewLottery(@PathVariable Integer userId, @PathVariable Integer ticketId) throws LotteryPurchaseException {
         return this.userService.buyLotteryTicket(userId,ticketId);
     }
 
     @GetMapping("/{userId}/lotteries")
-    Map<String, Object> getListAllLotteryTicket(@PathVariable Integer userId) throws LotteryIdNotFound {
+    Map<String, Object> getAllLotteryOfUser(@PathVariable Integer userId) throws LotteryIdNotFound {
         return this.userService.getListAllLotteryTicket(userId);
     }
 
     @DeleteMapping("/{userId}/lotteries/{ticketId}")
-    Map<String, String> sellLotteryTicket(@PathVariable Integer userId,@PathVariable Integer ticketId) throws LotteryDeleteException {
+    Map<String, String> sellLotteryFromUser(@PathVariable Integer userId, @PathVariable Integer ticketId) throws LotteryDeleteException {
         return this.userService.sellLotteryTicket(userId,ticketId);
     }
 

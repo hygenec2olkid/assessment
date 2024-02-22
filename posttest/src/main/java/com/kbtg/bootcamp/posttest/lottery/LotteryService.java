@@ -3,7 +3,6 @@ package com.kbtg.bootcamp.posttest.lottery;
 import com.kbtg.bootcamp.posttest.repository.LotteryRepository;
 import com.kbtg.bootcamp.posttest.requestbody.TicketDetail;
 import com.kbtg.bootcamp.posttest.table.Lottery;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.Collections;
@@ -12,8 +11,12 @@ import java.util.Map;
 
 @Service
 public class LotteryService {
-    @Autowired
-    private  LotteryRepository lotteryRepository;
+    private final LotteryRepository lotteryRepository;
+
+    public LotteryService(LotteryRepository lotteryRepository) {
+        this.lotteryRepository = lotteryRepository;
+    }
+
     public Map<String, List<String>> getAllLotteryNumber(){
         List<String> tickets = lotteryRepository.getAllLotteryNumber();
         return Collections.singletonMap("tickets",tickets);
