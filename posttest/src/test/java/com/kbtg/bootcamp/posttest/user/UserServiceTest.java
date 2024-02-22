@@ -56,7 +56,7 @@ class UserServiceTest {
     }
     @Test
     @DisplayName("should throw LotteryPurchaseException when mockLottery is null")
-    public void testThrowLotteryPurchaseException() throws LotteryPurchaseException {
+    public void testThrowLotteryPurchaseException()  {
         int mockUserId = 1;
         int mockTicketId = 1;
         when(lotteryRepository.getAllLotteryById(any())).thenReturn(null);
@@ -83,7 +83,7 @@ class UserServiceTest {
     }
     @Test
     @DisplayName("should throw LotteryIdNotFound")
-    public void testThrowLotteryIdNotFound() throws LotteryIdNotFound {
+    public void testThrowLotteryIdNotFound()  {
         int mockUserId = 1;
         when(userTicketRepository.getListLotteriesByUserId(mockUserId)).thenReturn(List.of());
         String expected = "UserId: " + mockUserId + " not found";
@@ -110,7 +110,7 @@ class UserServiceTest {
     }
     @Test
     @DisplayName("should throw LotteryDeleteException")
-    public void testThrowLotteryDeleteException() throws LotteryDeleteException {
+    public void testThrowLotteryDeleteException()  {
         int mockUserId = 1;
         int mockTicketId = 1;
         when(userTicketRepository.sellLotteryTicket(mockUserId,mockTicketId)).thenReturn(null);
