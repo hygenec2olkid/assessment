@@ -1,10 +1,8 @@
 package com.kbtg.bootcamp.posttest.admin;
 
 import com.kbtg.bootcamp.posttest.exceptionhandler.exception.GetAllLotteryException;
-import com.kbtg.bootcamp.posttest.lottery.LotteryService;
 import com.kbtg.bootcamp.posttest.requestbody.TicketDetail;
 import jakarta.validation.Valid;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -16,15 +14,18 @@ import java.util.Map;
 @RestController
 @RequestMapping("/admin")
 public class AdminController {
-    @Autowired
-    private  LotteryService lotteryService;
+    private final AdminService adminService;
+
+    public AdminController(AdminService adminService) {
+        this.adminService = adminService;
+    }
 
     @PostMapping("/lotteries")
-    public Map<String,String> addNewLotteryTicket(@Valid @RequestBody TicketDetail ticketDetail, BindingResult bindingResult) throws GetAllLotteryException {
+    public Map<String,String> addNewLotteryByAdmin(@Valid @RequestBody TicketDetail ticketDetail, BindingResult bindingResult) throws GetAllLotteryException {
         if(bindingResult.hasErrors()){
             throw new GetAllLotteryException("Invalid request body");
         }
-        return this.lotteryService.addNewLotteryTicket(ticketDetail);
+        return this.adminService.addNewLotteryByAdmin(ticketDetail);
     }
 }
 

@@ -21,10 +21,4 @@ public class LotteryService {
         List<String> tickets = lotteryRepository.getAllLotteryNumber();
         return Collections.singletonMap("tickets",tickets);
     }
-
-    public Map<String, String> addNewLotteryTicket(TicketDetail ticketDetail) {
-        Lottery lottery = new Lottery(ticketDetail.ticket(),ticketDetail.price(),ticketDetail.amount());
-        this.lotteryRepository.save(lottery);
-        return Collections.singletonMap("ticket",ticketDetail.ticket());
-    }
 }

@@ -1,6 +1,5 @@
 package com.kbtg.bootcamp.posttest.admin;
 
-import com.kbtg.bootcamp.posttest.lottery.LotteryService;
 import com.kbtg.bootcamp.posttest.requestbody.TicketDetail;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -21,7 +20,7 @@ import java.util.Map;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
-import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.*;
+import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.csrf;
 
 
 
@@ -32,7 +31,7 @@ class AdminControllerTest {
     private MockMvc mockMvc;
 
     @MockBean
-    private LotteryService lotteryService;
+    private AdminService adminService;
 
     private String getAuthorizationHeader(String username, String password) {
         String auth = username + ":" + password;
@@ -53,7 +52,7 @@ class AdminControllerTest {
                 }""";
         BindingResult bindingResult = mock(BindingResult.class);
         when(bindingResult.hasErrors()).thenReturn(false);
-        when(lotteryService.addNewLotteryTicket(any(TicketDetail.class))).thenReturn(response);
+        when(adminService.addNewLotteryByAdmin(any(TicketDetail.class))).thenReturn(response);
 
         mockMvc.perform(MockMvcRequestBuilders.post("/admin/lotteries")
                         .with(csrf())
