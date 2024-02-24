@@ -1,8 +1,6 @@
 package com.kbtg.bootcamp.posttest.lottery;
 
 import com.kbtg.bootcamp.posttest.repository.LotteryRepository;
-import com.kbtg.bootcamp.posttest.requestbody.TicketDetail;
-import com.kbtg.bootcamp.posttest.table.Lottery;
 import org.springframework.stereotype.Service;
 
 import java.util.Collections;
