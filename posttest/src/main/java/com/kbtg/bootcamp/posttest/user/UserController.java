@@ -13,20 +13,18 @@ import java.util.Map;
 public class UserController {
     @Autowired
     private UserService userService;
-    @PostMapping("/{userId}/lotteries/{ticketId}")
+    @PostMapping("/{userId:\\d{10}}/lotteries/{ticketId}")
     Map<String, String> butNewLottery(@PathVariable Integer userId, @PathVariable Integer ticketId) throws LotteryPurchaseException {
         return this.userService.buyLotteryTicket(userId,ticketId);
     }
 
-    @GetMapping("/{userId}/lotteries")
+    @GetMapping("/{userId:\\d{10}}/lotteries")
     Map<String, Object> getAllLotteryOfUser(@PathVariable Integer userId) throws LotteryIdNotFound {
         return this.userService.getListAllLotteryTicket(userId);
     }
 
-    @DeleteMapping("/{userId}/lotteries/{ticketId}")
+    @DeleteMapping("/{userId:\\d{10}}/lotteries/{ticketId}")
     Map<String, String> sellLotteryFromUser(@PathVariable Integer userId, @PathVariable Integer ticketId) throws LotteryDeleteException {
         return this.userService.sellLotteryTicket(userId,ticketId);
     }
-
-
 }

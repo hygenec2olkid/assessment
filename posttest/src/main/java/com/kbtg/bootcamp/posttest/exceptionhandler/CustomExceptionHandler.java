@@ -33,7 +33,7 @@ public class CustomExceptionHandler extends ResponseEntityExceptionHandler {
         return new ResponseEntity<>(response,HttpStatus.NOT_FOUND);
     }
     @ExceptionHandler(value = {GetAllLotteryException.class})
-    public ResponseEntity<Object> handlerRequestBodyNotValid(GetAllLotteryException e){
+    public ResponseEntity<Object> handlerRequestBodyInvalid(GetAllLotteryException e){
         CustomExceptionResponse response = new CustomExceptionResponse(e.getMessage());
         return new ResponseEntity<>(response,HttpStatus.BAD_REQUEST);
     }
