@@ -4,7 +4,9 @@ import com.kbtg.bootcamp.posttest.exceptionhandler.exception.LotteryDeleteExcept
 import com.kbtg.bootcamp.posttest.exceptionhandler.exception.LotteryIdNotFound;
 import com.kbtg.bootcamp.posttest.exceptionhandler.exception.LotteryPurchaseException;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.servlet.resource.NoResourceFoundException;
 
 import java.util.Map;
 
