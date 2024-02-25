@@ -23,7 +23,7 @@ public class AdminController {
     @PostMapping("/lotteries")
     public Map<String,String> addNewLotteryByAdmin(@Valid @RequestBody TicketDetail ticketDetail, BindingResult bindingResult) throws GetAllLotteryException {
         if(bindingResult.hasErrors()){
-            throw new GetAllLotteryException("Invalid request body");
+            throw new GetAllLotteryException("Invalid request body.");
         }
         return this.adminService.addNewLotteryByAdmin(ticketDetail);
     }
