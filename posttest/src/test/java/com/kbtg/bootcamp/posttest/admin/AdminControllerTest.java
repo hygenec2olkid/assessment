@@ -65,7 +65,7 @@ class AdminControllerTest {
 
     @Test
     @DisplayName("should throw GetAllLotteryException")
-    public void testThrowAllLotteryException() throws Exception {
+    public void testThrowAllLotteryExceptionCaseTicketInvalid() throws Exception {
         String requestBody = """
                 {
                     "ticket": "12345612341234",
@@ -80,7 +80,26 @@ class AdminControllerTest {
                         .content(requestBody)
                         .header("Authorization", "Basic " + getAuthorizationHeader("admin", "password")))
                 .andExpect(MockMvcResultMatchers.status().isBadRequest())
-                .andExpect(MockMvcResultMatchers.jsonPath("$.errorMessage").value("Invalid request body"));
+                .andExpect(MockMvcResultMatchers.jsonPath("$.errorMessage").value("Invalid request body."));
+    }
+    @Test
+    @DisplayName("should throw GetAllLotteryException price is not int")
+    public void testThrowAllLotteryExceptionCasePriceOrAmountInvalid() throws Exception {
+        String requestBody = """
+                {
+                    "ticket": "123456",
+                    "price": "80g",
+                    "amount": "1"
+                }""";
+        BindingResult bindingResult = mock(BindingResult.class);
+        when(bindingResult.hasErrors()).thenReturn(true);
+        mockMvc.perform(MockMvcRequestBuilders.post("/admin/lotteries")
+                        .with(csrf())
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(requestBody)
+                        .header("Authorization", "Basic " + getAuthorizationHeader("admin", "password")))
+                .andExpect(MockMvcResultMatchers.status().isBadRequest())
+                .andExpect(MockMvcResultMatchers.jsonPath("$.errorMessage").value("Invalid request body."));
     }
 
 }
