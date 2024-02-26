@@ -13,13 +13,13 @@ public class UserTicket {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
 
-    private Integer user_id;
+    private String user_id;
     private Integer ticket_id;
     private String  ticket_number;
     private Integer price;
     private Integer amount;
 
-    public UserTicket(Integer user_id, Integer ticket_id, String ticket_number, Integer price, Integer amount) {
+    public UserTicket(String user_id, Integer ticket_id, String ticket_number, Integer price, Integer amount) {
         this.user_id = user_id;
         this.ticket_id = ticket_id;
         this.ticket_number = ticket_number;

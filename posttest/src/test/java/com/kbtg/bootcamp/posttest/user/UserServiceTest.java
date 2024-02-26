@@ -10,6 +10,7 @@ import com.kbtg.bootcamp.posttest.table.UserTicket;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
+import org.springframework.data.domain.Limit;
 
 import java.util.*;
 
@@ -34,18 +35,18 @@ class UserServiceTest {
     }
 
     @Test
-    @DisplayName("should return user_ticket id after buy")
+    @DisplayName("should return id of user_ticket after buy")
     void buyLotteryTicket() throws LotteryPurchaseException {
-        int mockUserId = 1;
+        String mockUserId = "1234567890";
         int mockTicketId = 1;
         Lottery mockLottery = new Lottery("123456",80,1);
-        when(lotteryRepository.getAllLotteryById(any())).thenReturn(mockLottery);
         UserTicket mockUserTicket = new UserTicket(
                 mockUserId,
                 mockLottery.getId(),
                 mockLottery.getTicket_number(),
                 mockLottery.getPrice(),
                 mockLottery.getAmount());
+        when(lotteryRepository.getAllLotteryById(mockTicketId)).thenReturn(mockLottery);
         when(userTicketRepository.save(any())).thenReturn(mockUserTicket);
         UserTicket mockSaveTicket = userTicketRepository.save(mockUserTicket);
         Map<String,String> expected = Collections.singletonMap("id", String.valueOf(mockSaveTicket.getId()));
@@ -57,10 +58,10 @@ class UserServiceTest {
     @Test
     @DisplayName("should throw LotteryPurchaseException when mockLottery is null")
     public void testThrowLotteryPurchaseException()  {
-        int mockUserId = 1;
+        String mockUserId = "1234567890";
         int mockTicketId = 1;
         when(lotteryRepository.getAllLotteryById(any())).thenReturn(null);
-        String expected = "ticketId: " + mockTicketId + " not have in repository";
+        String expected = "ticketId: " + mockTicketId + " not have in repository.";
 
         Exception actual = assertThrows(LotteryPurchaseException.class, () -> userService.buyLotteryTicket(mockUserId, mockTicketId));
 
@@ -70,12 +71,12 @@ class UserServiceTest {
     @Test
     @DisplayName("should return getListAllLotteryTicket")
     public void getListAllLotteryTicket() throws LotteryIdNotFound {
-        int mockUserId = 1;
-        when(userTicketRepository.getListLotteriesByUserId(mockUserId)).thenReturn(Arrays.asList("123456,80,1","000001,80,1","000002,80,1"));
+        String mockUserId = "1234567890";
+        when(userTicketRepository.getListLotteriesByUserId(mockUserId)).thenReturn(Arrays.asList("123456,80,3","000001,100,2","000002,120,1"));
         Map<String,Object> expected= new HashMap<>();
         expected.put("tickets",Arrays.asList("123456","000001","000002"));
-        expected.put("count",3);
-        expected.put("cost",240);
+        expected.put("count",6);
+        expected.put("cost",560);
 
         Map<String,Object> actual = userService.getListAllLotteryTicket(mockUserId);
 
@@ -84,9 +85,9 @@ class UserServiceTest {
     @Test
     @DisplayName("should throw LotteryIdNotFound")
     public void testThrowLotteryIdNotFound()  {
-        int mockUserId = 1;
+        String mockUserId = "1234567890";
         when(userTicketRepository.getListLotteriesByUserId(mockUserId)).thenReturn(List.of());
-        String expected = "UserId: " + mockUserId + " not found";
+        String expected = "UserId: " + mockUserId + " has not bought a lottery ticket yet.";
 
         Exception actual = assertThrows(LotteryIdNotFound.class, () -> userService.getListAllLotteryTicket(mockUserId));
 
@@ -96,10 +97,10 @@ class UserServiceTest {
     @Test
     @DisplayName("should return ticketNumber after delete ticket")
     public void sellLotteryTicket() throws LotteryDeleteException {
-        int mockUserId = 1;
+        String mockUserId = "1234567890";
         int mockTicketId = 1;
         UserTicket mockUserTicket = new UserTicket(mockUserId,mockTicketId,"123456",80,1);
-        when(userTicketRepository.sellLotteryTicket(mockUserId,mockTicketId)).thenReturn(mockUserTicket);
+        when(userTicketRepository.sellLotteryTicket(mockUserId,mockTicketId, Limit.of(1))).thenReturn(mockUserTicket);
         String mockTicketNumber = mockUserTicket.getTicket_number();
         Map<String, String> expected = Collections.singletonMap("ticket",mockTicketNumber);
 
@@ -111,10 +112,10 @@ class UserServiceTest {
     @Test
     @DisplayName("should throw LotteryDeleteException")
     public void testThrowLotteryDeleteException()  {
-        int mockUserId = 1;
+        String mockUserId = "1234567890";
         int mockTicketId = 1;
-        when(userTicketRepository.sellLotteryTicket(mockUserId,mockTicketId)).thenReturn(null);
-        String expected = "Delete fail please check userId and ticketId have in repository";
+        when(userTicketRepository.sellLotteryTicket(mockUserId,mockTicketId, Limit.of(1))).thenReturn(null);
+        String expected = "UserId: 1234567890 not have ticketId: 1";
 
         Exception actual = assertThrows(LotteryDeleteException.class, () -> userService.sellLotteryTicket(mockUserId,mockTicketId));
 
@@ -142,8 +143,8 @@ class UserServiceTest {
     @Test
     @DisplayName("should return total of count")
     public void testCalTotalCount(){
-        int expected = 4;
-        List<String> lst = Arrays.asList("123456,80,2","000001,100,1","000002,110,1");
+        int expected = 6;
+        List<String> lst = Arrays.asList("123456,80,1","000001,100,2","000002,120,3");
 
         int actual = userService.calTotalCount(lst);
 
@@ -152,8 +153,8 @@ class UserServiceTest {
     @Test
     @DisplayName("should return total of cost")
     public void testCalTotalCost(){
-        int expected = 370;
-        List<String> lst = Arrays.asList("123456,80,2","000001,100,1","000002,110,1");
+        int expected = 600;
+        List<String> lst = Arrays.asList("123456,80,2","000001,100,2","000002,120,2");
 
         int actual = userService.calTotalCost(lst);
 
@@ -163,9 +164,9 @@ class UserServiceTest {
     @DisplayName("should return list ticket_number")
     public void testCutStringList(){
         List<String> expected = Arrays.asList("123456","000001","000002");
-        List<String> lst = Arrays.asList("123456,80,2","000001,100,1","000002,110,1");
+        List<String> mockGetLists = Arrays.asList("123456,80,2","000001,100,1","000002,110,1");
 
-        List<String> actual = userService.cutStringList(lst);
+        List<String> actual = userService.cutStringList(mockGetLists);
 
         assertEquals(expected,actual);
     }

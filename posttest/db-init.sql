@@ -14,7 +14,7 @@ CREATE TABLE lottery
 CREATE TABLE user_ticket
 (
     id              SERIAL PRIMARY KEY,
-    user_id          INTEGER NOT NULL,
+    user_id          VARCHAR(10) NOT NULL,
     ticket_id        INTEGER NOT NULL,
     ticket_number    VARCHAR(6) NOT NULL,
     price           INTEGER NOT NULL,

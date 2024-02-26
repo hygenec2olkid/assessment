@@ -7,6 +7,7 @@ import com.kbtg.bootcamp.posttest.repository.LotteryRepository;
 import com.kbtg.bootcamp.posttest.repository.UserTicketRepository;
 import com.kbtg.bootcamp.posttest.table.Lottery;
 import com.kbtg.bootcamp.posttest.table.UserTicket;
+import org.springframework.data.domain.Limit;
 import org.springframework.stereotype.Service;
 
 import java.util.*;
@@ -22,15 +23,16 @@ public class UserService {
         this.userTicketRepository = userTicketRepository;
     }
 
-    public Map<String,String> buyLotteryTicket(Integer userId, Integer ticketId) throws LotteryPurchaseException {
+    public Map<String,String> buyLotteryTicket(String userId, Integer ticketId) throws LotteryPurchaseException {
         Lottery lottery = this.lotteryRepository.getAllLotteryById(ticketId);
         if (lottery != null){
-            UserTicket userTicket = new UserTicket(userId,lottery.getId(),lottery.getTicket_number(),lottery.getPrice(),lottery.getAmount());
+            UserTicket userTicket = new UserTicket(userId,lottery.getId(),lottery.getTicket_number(),lottery.getPrice(),1);
             UserTicket saveTicket = this.userTicketRepository.save(userTicket);
+
 
             updateLotteryAfterBuy(lottery);
             return Collections.singletonMap("id",String.valueOf(saveTicket.getId()));
-        }throw new LotteryPurchaseException("ticketId: " + ticketId + " not have in repository");
+        }throw new LotteryPurchaseException("ticketId: " + ticketId + " not have in repository.");
     }
     public void updateLotteryAfterBuy(Lottery lottery){
         lottery.setAmount(lottery.getAmount() - 1);
@@ -41,7 +43,7 @@ public class UserService {
         }
     }
 
-    public Map<String,Object> getListAllLotteryTicket(Integer userId) throws LotteryIdNotFound {
+    public Map<String,Object> getListAllLotteryTicket(String userId) throws LotteryIdNotFound {
             List<String> lst = this.userTicketRepository.getListLotteriesByUserId(userId);
             if (!lst.isEmpty()){
                 Integer count = calTotalCount(lst);
@@ -51,7 +53,7 @@ public class UserService {
                 response.put("count",count);
                 response.put("cost",cost);
                 return response;
-            }throw new LotteryIdNotFound("UserId: " + userId + " not found");
+            }throw new LotteryIdNotFound("UserId: " + userId + " has not bought a lottery ticket yet.");
     }
 
     public Integer calTotalCount(List<String> lst) {
@@ -81,8 +83,8 @@ public class UserService {
         return lottery_list;
     }
 
-    public Map<String, String> sellLotteryTicket(Integer userId, Integer ticketId) throws LotteryDeleteException {
-        UserTicket userTicket = this.userTicketRepository.sellLotteryTicket(userId,ticketId);
+    public Map<String, String> sellLotteryTicket(String userId, Integer ticketId) throws LotteryDeleteException {
+        UserTicket userTicket = this.userTicketRepository.sellLotteryTicket(userId,ticketId, Limit.of(1));
 
         if (userTicket != null){
             String ticketNumber = userTicket.getTicket_number();
@@ -90,6 +92,6 @@ public class UserService {
             return Collections.singletonMap("ticket",ticketNumber);
         }
 
-        throw new LotteryDeleteException("Delete fail please check userId and ticketId have in repository");
+        throw new LotteryDeleteException("UserId: " + userId + " not have ticketId: " + ticketId);
     }
 }

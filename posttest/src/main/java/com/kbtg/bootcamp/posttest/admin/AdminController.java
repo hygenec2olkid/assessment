@@ -21,7 +21,7 @@ public class AdminController {
     }
 
     @PostMapping("/lotteries")
-    public Map<String,String> addNewLotteryByAdmin(@Valid @RequestBody TicketDetail ticketDetail, BindingResult bindingResult) throws GetAllLotteryException {
+    public Map<String,String> addNewLotteryByAdmin(@Valid @RequestBody TicketDetail ticketDetail,BindingResult bindingResult) throws GetAllLotteryException {
         if(bindingResult.hasErrors()){
             throw new GetAllLotteryException("Invalid request body.");
         }

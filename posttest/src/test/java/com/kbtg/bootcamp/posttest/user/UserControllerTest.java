@@ -20,7 +20,7 @@ class UserControllerTest {
     @Test
     @DisplayName("should return status ok after sent request BuyLotteryTicket")
     public void testBuyLotteryTicket() throws Exception {
-        int mockUserId = 1234567890;
+        String mockUserId = "1234567890";
         int ticketId = 1;
 
         mockMvc.perform(MockMvcRequestBuilders.post("/users/" + mockUserId + "/lotteries/" + ticketId))
@@ -29,17 +29,26 @@ class UserControllerTest {
     @Test
     @DisplayName("should return status ok after sent request GetAllLotteryOfUser")
     public void testGetAllLotteryOfUser() throws Exception {
-        int mockUserId = 1234567890;
+        String mockUserId = "1234567890";
         mockMvc.perform(MockMvcRequestBuilders.get("/users/"+mockUserId +"/lotteries"))
                 .andExpect(MockMvcResultMatchers.status().isOk());
     }
     @Test
     @DisplayName("should return status ok after sent request SellLotteryFromUser")
     public void testSellLotteryFromUser() throws Exception {
-        int mockUserId = 1234567890;
+        String mockUserId = "1234567890";
         int mockTicketId = 1;
         mockMvc.perform(MockMvcRequestBuilders.delete("/users/"+mockUserId +"/lotteries/"+mockTicketId))
                 .andExpect(MockMvcResultMatchers.status().isOk());
+    }
+
+    @Test
+    @DisplayName("should throw exception when userId invalid")
+    public void shouldThrowExceptionWhenUserIdInvalid() throws Exception {
+        String mockUserId = "12345678901";
+        int mockTicketId = 1;
+        mockMvc.perform(MockMvcRequestBuilders.post("/users/"+mockUserId +"/lotteries/"+mockTicketId))
+                .andExpect(MockMvcResultMatchers.status().isBadRequest());
     }
 
     }
