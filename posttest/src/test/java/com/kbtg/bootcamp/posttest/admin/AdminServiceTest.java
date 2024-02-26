@@ -26,10 +26,9 @@ class AdminServiceTest {
 
     @Test
     @DisplayName(value = "should return ticketNumber after addNewLotteryTicket")
-
     void addNewLotteryByAdmin() {
-            Lottery mockLottery = new Lottery("123456",80,1);
             TicketDetail mockTicketDetail = new TicketDetail("123456",80,1);
+            Lottery mockLottery = new Lottery("123456",80,1);
             Map<String,String> expected = Collections.singletonMap("ticket", mockLottery.getTicket_number());
             when(lotteryRepository.save(mockLottery)).thenReturn(mockLottery);
 
