@@ -40,7 +40,7 @@ class AdminControllerTest {
     }
 
     @Test
-    @DisplayName("should return ticketNumber after add into repo")
+    @DisplayName("should return ticketNumber after add newTicket in repository")
     public void testAddNewTicketSuccess() throws Exception {
         Map<String, String> response = new HashMap<>();
         response.put("ticket","123456");
@@ -59,7 +59,7 @@ class AdminControllerTest {
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(requestBody)
                         .header("Authorization", "Basic " + getAuthorizationHeader("admin", "password")))
-                        .andExpect(MockMvcResultMatchers.status().isOk())
+                        .andExpect(MockMvcResultMatchers.status().isCreated())
                         .andExpect(MockMvcResultMatchers.jsonPath("$.ticket").value("123456"));
     }
 
